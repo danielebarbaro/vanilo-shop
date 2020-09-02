@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Konekt\User\Contracts\Profile;
 
-class User extends Authenticatable
+class User extends \Konekt\AppShell\Models\User
 {
     use Notifiable;
 
@@ -35,5 +35,24 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+//        'last_login_at' => 'datetime'
     ];
+
+    // Implement these methods from the required Interface:
+    public function inactivate()
+    {
+        $this->is_active = false;
+        $this->save();
+    }
+
+    public function activate()
+    {
+        $this->is_active = true;
+        $this->save();
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return null;
+    }
 }
